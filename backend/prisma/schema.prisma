@@ -51,4 +51,4 @@ model Task {
 
   @@index([projectId])
   @@index([parentId])
-}
+} 

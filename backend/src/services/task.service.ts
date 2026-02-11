@@ -19,7 +19,11 @@ export const createTask = async (data: {
     },
     include: {    
       subtasks: true, // Return subtasks if any exist (usually empty on create) 
+      assignee:{
+        select:{name:true , email :true}
+      }
     },
+    
   });
 };
 
@@ -38,3 +42,13 @@ export const getProjectTasks=async(projectId:string)=>{
     }
   })
 }
+
+export const assignTask = async (taskId: string, userId: string) => {
+  return await prisma.task.update({
+    where: { id: taskId },
+    data: { assigneeId: userId },
+    include: {
+      assignee: { select: { name: true } }
+    }
+  });
+};
