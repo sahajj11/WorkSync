@@ -1,111 +1,58 @@
-import React, { useEffect, useState } from 'react';
-import api from '../services/api';
-import { Plus, MoreVertical, Calendar, Users } from 'lucide-react';
-import CreateProjectModal from "../components/modals/CreateProjectModal.jsx"
+import React from 'react';
+import { Briefcase, CheckCircle2, Clock, ArrowUpRight } from 'lucide-react';
 
 export const Overview = () => {
-  const [projects, setProjects] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProjects();
-  }, []);
-
-  const fetchProjects = async () => {
-    try {
-      const { data } = await api.get('/projects/my-projects');
-      setProjects(data);
-    } catch (err) {
-      console.error("Failed to fetch projects");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onProjectCreated = (newProject) => {
-    setProjects([newProject, ...projects]);
-  };
-
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* Header */}
-      <header className="flex justify-between items-center mb-10">
-        <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">My Overview</h1>
-          <p className="text-gray-500 mt-1">Check what's happening across your workspace.</p>
-        </div>
-        <button 
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-xl font-semibold transition-all flex items-center gap-2 shadow-lg shadow-blue-600/20 active:scale-95"
-        >
-          <Plus size={20} /> New Project
-        </button>
+    <div className="space-y-10 animate-in fade-in duration-700">
+      {/* 1. Welcome Section */}
+      <header>
+        <h1 className="text-3xl font-bold text-white tracking-tight">System Overview</h1>
+        <p className="text-gray-500 mt-1">Here's what's happening across your workspaces today.</p>
       </header>
 
-      {/* Grid */}
-      {loading ? (
-        <div className="text-gray-600">Loading your projects...</div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+      {/* 2. Stats Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <StatCard title="Active Projects" value="12" icon={<Briefcase className="text-blue-500" />} change="+2 this week" />
+        <StatCard title="Tasks Completed" value="48" icon={<CheckCircle2 className="text-green-500" />} change="+5 today" />
+        <StatCard title="Upcoming Deadlines" value="3" icon={<Clock className="text-yellow-500" />} color="text-yellow-500" />
+      </div>
 
-          {/* Empty State Action */}
-          {projects.length === 0 && (
-            <button 
-              onClick={() => setIsModalOpen(true)}
-              className="border-2 border-dashed border-gray-800 rounded-2xl p-8 flex flex-col items-center justify-center text-gray-500 hover:border-gray-700 hover:text-gray-400 transition-all"
-            >
-              <Plus size={32} className="mb-2 opacity-20" />
-              <span>Create your first project</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* 3. Recent Projects (Left 2/3) */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="flex justify-between items-center">
+            <h2 className="text-xl font-bold text-gray-200">Recent Projects</h2>
+            <button className="text-blue-500 text-sm font-medium hover:underline flex items-center gap-1">
+              View all <ArrowUpRight size={14} />
             </button>
-          )}
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             {/* We will map your real project cards here */}
+             <div className="h-32 bg-[#12141a] border border-gray-800 rounded-2xl p-5">
+                <p className="text-gray-600 text-sm italic">Project cards will appear here...</p>
+             </div>
+          </div>
         </div>
-      )}
 
-      {/* Modals */}
-      <CreateProjectModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onProjectCreated={onProjectCreated}
-      />
+        {/* 4. Activity Feed (Right 1/3) */}
+        <div className="space-y-6">
+          <h2 className="text-xl font-bold text-gray-200">Activity Feed</h2>
+          <div className="bg-[#12141a] border border-gray-800 rounded-2xl p-6 min-h-[300px]">
+            <p className="text-gray-600 text-sm">No recent activity found.</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
 
-// Internal ProjectCard Component for cleanliness
-const ProjectCard = ({ project }) => (
-  <div className="bg-[#12141a] border border-gray-800 p-6 rounded-2xl hover:border-blue-500/50 transition-all group">
-    <div className="flex justify-between items-start mb-6">
-      <div className="h-12 w-12 bg-blue-600/10 rounded-xl flex items-center justify-center text-blue-500 font-bold text-lg">
-        {project.name.charAt(0).toUpperCase()}
-      </div>
-      <button className="text-gray-700 hover:text-white transition">
-        <MoreVertical size={20} />
-      </button>
+const StatCard = ({ title, value, icon, change, color = "text-white" }) => (
+  <div className="bg-[#12141a] border border-gray-800 p-6 rounded-3xl hover:border-gray-700 transition-all">
+    <div className="flex justify-between items-start mb-4">
+      <div className="p-3 bg-white/5 rounded-xl border border-white/5">{icon}</div>
+      {change && <span className="text-[10px] font-bold text-green-500 bg-green-500/10 px-2 py-1 rounded-lg">{change}</span>}
     </div>
-
-    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition">
-      {project.name}
-    </h3>
-    <p className="text-gray-500 text-sm line-clamp-2 mb-6 h-10">
-      {project.description || "No description provided."}
-    </p>
-
-    <div className="flex items-center justify-between pt-5 border-t border-gray-800/50">
-      <div className="flex items-center gap-4 text-xs font-semibold text-gray-500 uppercase tracking-widest">
-        <span className="flex items-center gap-1.5">
-          <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
-          {project._count?.tasks || 0} Tasks
-        </span>
-      </div>
-      <div className="flex -space-x-2">
-        {/* Mockup of member avatars */}
-        <div className="h-7 w-7 rounded-full border-2 border-[#12141a] bg-gray-800 flex items-center justify-center text-[10px] text-white">SR</div>
-        <div className="h-7 w-7 rounded-full border-2 border-[#12141a] bg-blue-600 flex items-center justify-center text-[10px] text-white">+1</div>
-      </div>
-    </div>
+    <h3 className="text-gray-500 text-sm font-medium">{title}</h3>
+    <p className={`text-3xl font-bold mt-1 ${color}`}>{value}</p>
   </div>
 );

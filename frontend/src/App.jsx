@@ -9,6 +9,7 @@ import { Overview } from './pages/Overview';
 import { Projects } from './pages/Projects';
 import { Auth } from './pages/Auth';
 import { DashboardLayout } from './layouts/DashBoardLayout';
+import { ProjectBoard } from './pages/ProjectBoard';
 
 
 // The "Guard": Redirects to Login if no token is found
@@ -57,6 +58,7 @@ function App() {
            <Route path="/dashboard" element={<Overview />} />
           
           <Route path="/projects" element={<Projects />} /> 
+          <Route path="/projects/:id" element={<ProjectBoard />} /> 
         // </Route>
 
         {/* 404 Catch-all */}

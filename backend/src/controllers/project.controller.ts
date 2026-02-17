@@ -47,3 +47,25 @@ export const getMyProjects = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ error: 'Internal Server Error' });
   } 
 };
+
+export const getProjectById = async (req: any, res: Response) => {
+  try {
+    const { projectId } = req.params;
+    const userId = req.userId; // Injected by your Auth Middleware
+
+    if (!projectId) {
+      return res.status(400).json({ error: 'Project ID is required' });
+    }
+
+    const project = await ProjectService.getProjectById(projectId, userId);
+
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found or Access Denied' });
+    }
+
+    res.status(200).json(project);
+  } catch (error) {
+    console.error("Fetch Project Error:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};

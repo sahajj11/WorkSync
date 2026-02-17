@@ -7,7 +7,7 @@ interface AuthRequest extends Request {
 
 export const addMemberToProject=async(req:AuthRequest , res: Response)=>{
     try{
-        const {projectId , role } = req.body
+        const {projectId , role  } = req.body
         const userId=req.userId
 
     if (!projectId || !userId) {

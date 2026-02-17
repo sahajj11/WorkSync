@@ -40,3 +40,38 @@ export const getUserProjects = async (userId: string) => {
     }
   });
 };
+
+export const getProjectById = async (projectId: string, userId: string) => {
+  return await prisma.project.findFirst({
+    where: {
+      id: projectId,
+      // Security: Ensure the user requesting is a member of the project
+      members: {
+        some: {
+          userId: userId
+        }
+      }
+    },
+    include: {
+      tasks: {
+        orderBy: {
+          createdAt: 'desc'
+        }
+      },
+      members: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true
+            }
+          }
+        }
+      },
+      _count: {
+        select: { tasks: true }
+      }
+    }
+  });
+};
