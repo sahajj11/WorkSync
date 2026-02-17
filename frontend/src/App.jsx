@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { Auth } from './pages/Auth';
+import { DashboardLayout } from './layouts/DashBoardLayout';
+import { Overview } from './pages/Overview';
 
 
 // The "Guard": Redirects to Login if no token is found
@@ -40,17 +42,17 @@ function App() {
         />
 
         {/* Protected Dashboard Routes */}
-        {/* <Route 
+        <Route 
           element={
             <ProtectedRoute>
               <DashboardLayout />
             </ProtectedRoute>
           }
-        > */}
-          {/* <Route path="/dashboard" element={<Overview />} />
+        > 
+           <Route path="/dashboard" element={<Overview />} />
           
           <Route path="/projects" element={<Overview />} /> 
-        </Route> */}
+        // </Route>
 
         {/* 404 Catch-all */}
         <Route path="*" element={<Navigate to="/" replace />} />
