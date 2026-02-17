@@ -7,4 +7,4 @@ router.post('/create', TaskController.createTask);
 router.get("/get-tasks/:projectId",TaskController.getTasksByProject)
 router.patch('/assign', TaskController.assignTask);
 
-export default router
+export default router 

@@ -58,7 +58,7 @@ function App() {
            <Route path="/dashboard" element={<Overview />} />
           
           <Route path="/projects" element={<Projects />} /> 
-          <Route path="/projects/:id" element={<ProjectBoard />} /> 
+          <Route path="/projects/:projectId" element={<ProjectBoard />} /> 
         // </Route>
 
         {/* 404 Catch-all */}

@@ -31,7 +31,7 @@ export const getProjectTasks=async(projectId:string)=>{
   return await prisma.task.findMany({
     where:{
       projectId,
-      parentId:null,
+      
     },
     include:{
       subtasks:{
